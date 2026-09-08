@@ -71,6 +71,7 @@ export const chapters = pgTable("chapters", {
   title: varchar("title", { length: 255 }),
   views: integer("views").default(0).notNull(),
   pagesCount: integer("pages_count").default(12).notNull(),
+  pageUrls: text("page_urls"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
