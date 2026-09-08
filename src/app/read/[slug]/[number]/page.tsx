@@ -27,9 +27,21 @@ export default async function ReaderPage({
   const prev = idx >= 0 && idx < all.length - 1 ? all[idx + 1] : null; // smaller number
   const next = idx > 0 ? all[idx - 1] : null; // bigger number
 
-  const pages = Array.from({ length: chapter.pagesCount }, (_, i) => i + 1);
+  let realUrls: string[] = [];
+  if (chapter.pageUrls) {
+    try {
+      realUrls = JSON.parse(chapter.pageUrls);
+    } catch {
+      realUrls = [];
+    }
+  }
+  const pages = realUrls.length
+    ? realUrls.map((_, i) => i + 1)
+    : Array.from({ length: chapter.pagesCount }, (_, i) => i + 1);
   const pageSrc = (p: number) =>
-    `/api/placeholder-page?page=${p}&chapter=${num}&title=${encodeURIComponent(s.titleAr.slice(0, 24))}`;
+    realUrls.length
+      ? realUrls[p - 1]
+      : `/api/placeholder-page?page=${p}&chapter=${num}&title=${encodeURIComponent(s.titleAr.slice(0, 24))}`;
 
   return (
     <div className="bg-[#07080f]">
